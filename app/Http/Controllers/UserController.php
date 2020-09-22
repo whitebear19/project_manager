@@ -177,6 +177,7 @@ class UserController extends Controller
         $tasks = Task::where('project_id',$id)->get();
         $attachments = Attach::where('project_id',$id)->get();
         $comments = Comment::where('project_id',$id)->get();
+
         $page = "dashboard";
         return view('user.viewproject',compact('page','project','tasks','attachments','comments'));
     }

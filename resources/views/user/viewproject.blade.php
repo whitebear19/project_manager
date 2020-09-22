@@ -138,6 +138,7 @@
                             @foreach ($comments as $item)
                                 <tr>
                                     <td>
+                                        <span style="font-weight: 600;">{{ $item->user->name }} :</span>
                                         <p>{{ $item->content }}</p>
                                     </td>
                                 </tr>
