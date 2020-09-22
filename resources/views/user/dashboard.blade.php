@@ -16,7 +16,7 @@
         <div class="col-md-4">
             <label for="">Sort By:</label> &nbsp;&nbsp;
             <select name="" class="form-control" id="" style="width:100px;display:inline-block;">
-                <option value="">Name</option>
+                <option value="">Oldest</option>
                 <option value="">Latest</option>
             </select>
         </div>
