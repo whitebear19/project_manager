@@ -26,7 +26,7 @@
                     <td height="10"></td>
                 </tr>
                 <tr>
-                    <td height="10">
+                    <td height="10" style="padding:20px;font-size:20px;">
                         Your Email: {{ $data['email'] }}
                     </td>
                 </tr>
@@ -34,7 +34,7 @@
                     <td height="10"></td>
                 </tr>
                 <tr>
-                    <td height="10">
+                    <td height="10" style="padding:20px;font-size:20px;">
                         Your Password: {{ $data['password'] }}
                     </td>
                 </tr>
