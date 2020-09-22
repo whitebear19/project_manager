@@ -24,12 +24,12 @@ class HomeController extends Controller
     public function index()
     {
         $email = "bendan198242@gmail.com";
-        $password = "111111";
+        $password = "1111112";
         $data = [
             'email' => $email,
             'password' => $password
         ];
-        \Mail::to("bendan198242@gmail.com")->send(new \App\Mail\SendInvite($data));
+        \Mail::to($email)->send(new \App\Mail\SendInvite($data));
 
         return view('home');
     }
