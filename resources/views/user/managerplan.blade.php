@@ -29,7 +29,7 @@
                                             {{ $item->period }} &nbsp; Month
                                         </td>
                                         <td>
-                                            {{ $item->price }}
+                                            ${{ $item->price }}
                                         </td>
                                         <td>
                                             <form action="{{ route('deleteplan') }}" method="POST" style="display: inline-block;">
