@@ -30,6 +30,7 @@ Route::get('/dashboard/newproject', 'UserController@newproject')->name('newproje
 Route::post('/dashboard/storeproject', 'UserController@storeproject')->name('storeproject');
 Route::get('/dashboard/project/{id}', 'UserController@projectview');
 Route::post('/dashboard/deleteproject', 'UserController@deleteproject')->name('deleteproject');
+Route::post('/dashboard/movetoarchieve', 'UserController@movetoarchieve')->name('movetoarchieve');
 Route::post('/dashboard/deletetask', 'UserController@deletetask')->name('deletetask');
 Route::post('/dashboard/deleteuser', 'UserController@deleteuser')->name('deleteuser');
 Route::post('/dashboard/deleteplan', 'UserController@deleteplan')->name('deleteplan');

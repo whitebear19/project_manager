@@ -68,7 +68,7 @@ class UserController extends Controller
         {
             return redirect('/dashboard/project/'.Auth::user()->project_id);
         }
-        $projects = Project::where('user_id',Auth::user()->id)->get();
+        $projects = Project::where('user_id',Auth::user()->id)->where('status','0')->get();
         $data = array();
         $results = array();
         foreach($projects as $item)
@@ -97,8 +97,9 @@ class UserController extends Controller
 
     public function archieve(Request $request)
     {
+        $results = Project::where('user_id',Auth::user()->id)->where('status','1')->get();
         $page = "archieve";
-        return view('user.archieve',compact('page'));
+        return view('user.archieve',compact('page','results'));
     }
 
     public function settings(Request $request)
@@ -166,7 +167,8 @@ class UserController extends Controller
             'user_id'           => Auth::user()->id,
             'title'             => $request->get('title'),
             'description'       => $request->get('description'),
-            'date'              => $request->get('date')
+            'date'              => $request->get('date'),
+            'status'            => '0'
         ]);
         return redirect('/dashboard/project/'.$project->id);
     }
@@ -190,6 +192,18 @@ class UserController extends Controller
         $project->delete();
         return redirect('/dashboard');
     }
+
+    public function movetoarchieve(Request $request)
+    {
+        $id = $request->get('id');
+        $project = Project::find($id);
+
+        $project->status = '1';
+        $project->save();
+
+        return redirect('/dashboard');
+    }
+
     public function deletetask(Request $request)
     {
         $id = $request->get('id');

@@ -9,14 +9,26 @@
         @if (Auth::user()->role > 0)
             <div class="col-md-6">
                 <button class="btn_invite" data-toggle="modal" data-target="#inviteModal">Invite Collaborator</button>
+
             </div>
             <div class="col-md-6" style="text-align: right;">
-            <form action="{{ route('deleteproject') }}" method="post">
+                @if ($project->status == '0')
+                    <form action="{{ route('movetoarchieve') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $project->id }}">
+                        <button type="submit" class="btn btn-info">Complete Project</button>
+                    </form>
+                @endif
+
+
+                <form action="{{ route('deleteproject') }}" method="post">
                     @csrf
                     <input type="hidden" name="id" value="{{ $project->id }}">
                     <button type="submit" class="btn btn-denger">Delete Project</button>
                 </form>
             </div>
+        </div>
+
         @endif
 
 
