@@ -14,30 +14,36 @@
             style="width:6.25in;background:#ffffff; border-collapse:collapse">
             <tbody>
                 <tr>
-                    <td height="10"></td>
+                    <td style="padding:20px;">
+                        <table>
+                            <tr>
+                                <td style="padding-left:20px;" align="center">
+                                    <p style="font-weight:600;font-size:36px;"><span style="color:#004000;">Proj</span><span style="color:#99d9ea;">ect</span><span style="color:#5fa659">Manager</span></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td height="10"></td>
+                            </tr>
+                            <tr>
+                                <td height="10" style="padding:18px;font-size:18px;">
+                                    <span style="color:#222222;font-weight:600;">Your Email:</span> {{ $data['email'] }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td height="10"></td>
+                            </tr>
+                            <tr>
+                                <td height="10" style="padding:18px;font-size:18px;">
+                                    <span style="color:#222222;font-weight:600;">Your Password:</span> {{ $data['password'] }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td height="50"></td>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
 
-                <tr>
-                    <td style="padding-left:20px;" align="center">
-                        <p style="font-weight:600;font-size:36px;"><span style="color:#004000;">Proj</span><span style="color:#99d9ea;">ect</span><span style="color:#5fa659">Manager</span></p>
-                    </td>
-                </tr>
-                <tr>
-                    <td height="10"></td>
-                </tr>
-                <tr>
-                    <td height="10" style="padding:20px;font-size:20px;">
-                        Your Email: {{ $data['email'] }}
-                    </td>
-                </tr>
-                <tr>
-                    <td height="10"></td>
-                </tr>
-                <tr>
-                    <td height="10" style="padding:20px;font-size:20px;">
-                        Your Password: {{ $data['password'] }}
-                    </td>
-                </tr>
             </tbody>
         </table>
     </center>

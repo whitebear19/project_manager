@@ -18,6 +18,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $email = "";
     }
 
     protected function changeEnv($data = array()){
@@ -275,8 +276,8 @@ class UserController extends Controller
     public function create_invite(Request $request)
     {
         $id = $request->get('id');
-        $email = $request->get('invite_email');
-        $existMail = User::where('email',$email)->count();
+        $this->email = $request->get('invite_email');
+        $existMail = User::where('email',$this->email)->count();
         if($existMail > 0)
         {
             $result = "email";
@@ -284,21 +285,22 @@ class UserController extends Controller
         }
         else
         {
-            $password = "11111111";
+
+            $password = Str::random(8);
             $user = User::create([
                 'project_id'        => $id,
                 'name'              => $request->get('invite_name'),
-                'email'             => $email,
+                'email'             => $this->email,
                 'paid'              => '0',
                 'password'          => Hash::make($password),
                 'role'              => '0',
             ]);
 
             $data = [
-                'email' => $email,
+                'email' => $this->email,
                 'password' => $password
             ];
-            \Mail::to($email)->send(new \App\Mail\SendInvite($data));
+            \Mail::to($this->email)->send(new \App\Mail\SendInvite($data));
             return true;
         }
 
