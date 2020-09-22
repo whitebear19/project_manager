@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $email = "ultra.430@outlook.com";
+        $email = "bendan198242@gmail.com";
         $password = "111111";
         $data = [
             'email' => $email,
