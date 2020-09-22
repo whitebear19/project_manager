@@ -14,6 +14,7 @@ class HomeController extends Controller
     public function __construct()
     {
         // $this->middleware('auth');
+        $email = "";
     }
 
     /**
@@ -23,13 +24,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $email = "bendan198242@gmail.com";
+        $this->email = "bendan198242@gmail.com";
         $password = "1111112";
         $data = [
-            'email' => $email,
+            'email' => $this->email,
             'password' => $password
         ];
-        \Mail::to($email)->send(new \App\Mail\SendInvite($data));
+        \Mail::to($this->email)->send(new \App\Mail\SendInvite($data));
 
         return view('home');
     }
