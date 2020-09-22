@@ -20,3 +20,44 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/aboutus', 'HomeController@aboutus')->name('aboutus');
+Route::get('/contactus', 'HomeController@contactus')->name('contactus');
+Route::any('/dashboard', 'UserController@dashboard')->name('dashboard');
+Route::any('/dashboard/payment', 'UserController@payment')->name('payment');
+Route::any('/dashboard/archieve', 'UserController@archieve')->name('archieve');
+Route::any('/dashboard/settings', 'UserController@settings')->name('settings');
+Route::get('/dashboard/newproject', 'UserController@newproject')->name('newproject');
+Route::post('/dashboard/storeproject', 'UserController@storeproject')->name('storeproject');
+Route::get('/dashboard/project/{id}', 'UserController@projectview');
+Route::post('/dashboard/deleteproject', 'UserController@deleteproject')->name('deleteproject');
+Route::post('/dashboard/deletetask', 'UserController@deletetask')->name('deletetask');
+Route::post('/dashboard/deleteuser', 'UserController@deleteuser')->name('deleteuser');
+Route::post('/dashboard/deleteplan', 'UserController@deleteplan')->name('deleteplan');
+Route::get('/dashboard/plan', 'UserController@plan')->name('plan');
+Route::get('/dashboard/user', 'UserController@user')->name('user');
+Route::get('/dashboard/managerplan', 'UserController@managerplan')->name('managerplan');
+
+
+
+Route::post('/ajax/update_paypal', 'UserController@update_paypal');
+Route::post('/ajax/update_square', 'UserController@update_square');
+Route::post('/ajax/update_password', 'UserController@update_password');
+Route::post('/ajax/update_project', 'UserController@update_project');
+Route::post('/ajax/create_task', 'UserController@create_task');
+Route::post('/ajax/update_task', 'UserController@update_task');
+Route::post('/ajax/uploadattach', 'UserController@uploadattach');
+Route::post('/ajax/create_comment', 'UserController@create_comment');
+Route::post('/ajax/create_invite', 'UserController@create_invite');
+Route::post('/ajax/create_user', 'UserController@create_user');
+Route::post('/ajax/create_plan', 'UserController@create_plan');
+
+
+
+Route::post('handle-payment', 'PayPalPaymentController@handlePayment')->name('make.payment');
+Route::get('cancel-payment', 'PayPalPaymentController@paymentCancel')->name('cancel.payment');
+Route::get('payment-success', 'PayPalPaymentController@paymentSuccess')->name('success.payment');
+
+
+
+
+

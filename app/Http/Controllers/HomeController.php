@@ -13,7 +13,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     /**
@@ -23,6 +23,22 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $email = "ultra.430@outlook.com";
+        $password = "111111";
+        $data = [
+            'email' => $email,
+            'password' => $password
+        ];
+        \Mail::to($email)->send(new \App\Mail\SendInvite($data));
+        return true;
         return view('home');
+    }
+    public function aboutus()
+    {
+        return view('aboutus');
+    }
+    public function contactus()
+    {
+        return view('contactus');
     }
 }

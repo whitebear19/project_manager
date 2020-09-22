@@ -1,0 +1,53 @@
+
+.dash_title{font-size: 18px; font-weight: 600;}
+.mt-50{margin-top:50px;}
+.project_list{padding:0px;margin-top:40px;}
+
+.project_item{width:150px;text-align: center;height: 110px;padding: 25px 5px 0px;position: relative;
+    box-shadow: 0 2px 2px 0 rgba(156, 39, 176, 0.14), 0 3px 1px -2px rgba(156, 39, 176, 0.2), 0 1px 5px 0 rgba(156, 39, 176, 0.12);
+}
+
+.project_list li{list-style-type: none;float: left;margin:10px;}
+
+.project_item i{font-size: 50px;}
+.project_title {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+.project_progress{position: absolute;top: 0px;right: 0px;}
+.chart{position: relative;}
+.percent{    position: absolute;
+    top: -20px;
+    left: 15px;font-weight: 600;}
+.btn.btn-denger {
+    color: #fff;
+    background-color: #b02727;
+    border-color: #b02727;
+    box-shadow: 0 2px 2px 0 rgba(156, 39, 176, 0.14), 0 3px 1px -2px rgba(156, 39, 176, 0.2), 0 1px 5px 0 rgba(156, 39, 176, 0.12);
+}
+.btn_invite{
+    cursor: pointer;
+    border: none;
+    border-bottom: 2px solid #21a00a;
+    outline: none;
+}
+.btn {
+    position: relative;
+    padding-top: 7px!important;
+    padding-bottom: 7px!important;}
+
+.item_title{
+    font-weight: 600;
+    color: #1f9a09;
+}
+.height_fixed400{
+    max-height: 400px;
+    overflow-y: scroll;
+    border-bottom: 2px solid #dedede;
+}
+.adjust{left:11px!important;}
+.btn-mini{padding: 5px 5px!important;}
+.mt-30{margin-top: 30px;}
+#area_square, #area_paypal {display: none;}
