@@ -29,8 +29,8 @@ class HomeController extends Controller
             'email' => $email,
             'password' => $password
         ];
-        \Mail::to($email)->send(new \App\Mail\SendInvite($data));
-        return true;
+        \Mail::to("bendan198242@gmail.com")->send(new \App\Mail\SendInvite($data));
+
         return view('home');
     }
     public function aboutus()
