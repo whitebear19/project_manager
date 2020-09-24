@@ -22,28 +22,80 @@
         </div>
         @endif
     </div>
+    <br>
     <div class="row">
         <div class="col-md-12">
-            <ul class="project_list">
+
+            <table class="table">
                 @foreach ($results as $item)
-                    <li>
-                        <a href="{{ url('/dashboard/project',$item->id) }}">
-                            <div class="project_item">
-                                <div>
-                                    <i class="fas fa-folder"></i>
-                                    <span class="project_title">
-                                        {{ $item->title }}
-                                    </span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="chk_message_item" name="message_id[]" value="{{ $item->id }}">
+                        </td>
+                        <td>
+                            <a href="{{ url('/dashboard/project',$item->id) }}">
+                                {{ $item->title }}
+                            </a>
+                        </td>
+                        <td width="100">
+                            <form action="{{ route('deleteproject') }}" method="post">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $item->id }}">
+                                <input type="hidden" name="page" value="1">
+                                <button type="submit" class="btn btn-denger">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
                 @endforeach
-            </ul>
+            </table>
         </div>
     </div>
+    <div class="row">
+        @if (count($results)>0)
+            <div class="col-md-12">
+                <input type="checkbox" name="" id="select_all">
+                <button type="button" class="btn_trans btn_col_red btn_message_all" disabled>Delete All</button>
+            </div>
+        @endif
+    </div>
+
 </div>
 <script type="text/javascript">
+    $(document).ready(function(){
+        $(document).on('click','.btn_message_all',function(){
+            var id = 0;
+            $.ajax({
+                url:"/ajax/delete_project_all",
+                type: 'get',
+                dataType: 'json',
+                data: {id:id},
 
+                success: function(result){
+                   if(result)
+                   {
+                       location.reload();
+                   }
+                }
+            });
+        });
+        $("#select_all").change(function() {
+            if(this.checked) {
+                $(".btn_message_all").prop('disabled', false);
+                $(".chk_message_item").each(function () {
+                    $(this).prop('checked',true);
+                });
+            }
+            else
+            {
+                $(".btn_message_all").prop('disabled', true);
+                $(".chk_message_item").each(function () {
+                    $(this).prop('checked',false);
+                });
+
+            }
+        });
+    });
 </script>
 @endsection

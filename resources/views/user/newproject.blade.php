@@ -23,6 +23,11 @@
                     <label for="">Set a Due date(Optional)</label>
                     <input type="date" name="date" id="" class="form-control">
                 </div>
+                <div class="form-group">
+                    <label for="">Select Color</label>&nbsp;&nbsp;
+                    <input type="color" name="color">
+                </div>
+
                 <button type="submit" class="btn btn-primary pull-right">Save</button>
             </form>
         </div>

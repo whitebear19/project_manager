@@ -35,8 +35,11 @@
 }
 .btn {
     position: relative;
-    padding-top: 7px!important;
-    padding-bottom: 7px!important;}
+    padding-top: 6px!important;
+    padding-bottom: 6px!important;
+    padding-left: 15px;
+    padding-right: 15px;
+}
 
 .item_title{
     font-weight: 600;
@@ -51,3 +54,20 @@
 .btn-mini{padding: 5px 5px!important;}
 .mt-30{margin-top: 30px;}
 #area_square, #area_paypal {display: none;}
+.btn_trans{border: none;background-color: transparent;outline: none;box-shadow: none;}
+.btn_col_red{color:red;}
+input[type=checkbox]{cursor: pointer;}
+button{cursor: pointer;}
+.project-title{font-size: 20px;font-weight: 600;}
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
+    padding: 5px 8px;
+    vertical-align: middle;
+    border-color: #ddd;
+}
+.alreadycomment{
+    background-color: #d4b813!important;
+}
+
+.main-panel>.content {
+    margin-top: 20px;
+}

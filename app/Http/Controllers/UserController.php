@@ -10,6 +10,8 @@ use App\Models\Task;
 use App\Models\Attach;
 use App\Models\Comment;
 use App\Models\Plan;
+use App\Models\Contact;
+use Facade\Ignition\Tabs\Tab;
 use Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
@@ -68,7 +70,15 @@ class UserController extends Controller
         {
             return redirect('/dashboard/project/'.Auth::user()->project_id);
         }
-        $projects = Project::where('user_id',Auth::user()->id)->where('status','0')->get();
+
+        if(Auth::user()->role > 1)
+        {
+            $projects = Project::where('status','0')->get();
+        }
+        else
+        {
+             $projects = Project::where('user_id',Auth::user()->id)->where('status','0')->get();
+        }
         $data = array();
         $results = array();
         foreach($projects as $item)
@@ -80,8 +90,17 @@ class UserController extends Controller
             $numofTask = $task->count();
             $task = $task->where('status','1');
             $numofComplete = $task->count();
-            $pro = ($numofComplete/$numofTask)*100;
+            if($numofTask == 0)
+            {
+                $pro = 0;
+            }
+            else
+            {
+                $pro = ($numofComplete/$numofTask)*100;
+            }
+
             $data['pro'] = intval($pro);
+            $data['color'] = $item->color;
             array_push($results,$data);
         }
 
@@ -106,6 +125,19 @@ class UserController extends Controller
     {
         $page = "settings";
         return view('user.settings',compact('page'));
+    }
+
+    public function deadline(Request $request)
+    {
+        $results = Project::where('user_id',Auth::user()->id)->get();
+        $page = "deadline";
+        return view('user.deadline',compact('page','results'));
+    }
+    public function inbox(Request $request)
+    {
+        $contacts = Contact::all();
+        $page = "inbox";
+        return view('user.inbox',compact('page','contacts'));
     }
 
 
@@ -163,12 +195,14 @@ class UserController extends Controller
 
     public function storeproject(Request $request)
     {
+
         $project = Project::create([
             'user_id'           => Auth::user()->id,
             'title'             => $request->get('title'),
             'description'       => $request->get('description'),
             'date'              => $request->get('date'),
-            'status'            => '0'
+            'status'            => '0',
+            'color'             => $request->get('color')
         ]);
         return redirect('/dashboard/project/'.$project->id);
     }
@@ -176,12 +210,36 @@ class UserController extends Controller
     public function projectview(Request $request,$id)
     {
         $project = Project::find($id);
-        $tasks = Task::where('project_id',$id)->get();
-        $attachments = Attach::where('project_id',$id)->get();
-        $comments = Comment::where('project_id',$id)->get();
+        $tasks = Task::where('project_id',$id)->latest()->get();
+        $attachments = Attach::where('project_id',$id)->latest()->get();
+        $comments = Comment::where('project_id',$id)->latest()->get();
 
         $page = "dashboard";
-        return view('user.viewproject',compact('page','project','tasks','attachments','comments'));
+        $data = array();
+        $results = array();
+        foreach($tasks as $item)
+        {
+
+            $data['id'] = $item->id;
+            $data['title'] = $item->title;
+            $data['description'] = $item->description;
+            $data['status'] = $item->status;
+            $comment = Comment::where('task_id',$item->id)->where('user_id',Auth::user()->id)->first();
+            if(!empty($comment))
+            {
+                $data['comment_id'] = $comment->id;
+                $data['comment'] = $comment->content;
+            }
+            else
+            {
+                $data['comment_id'] = '';
+                $data['comment'] = '';
+            }
+
+            array_push($results,$data);
+        }
+
+        return view('user.viewproject',compact('page','project','tasks','attachments','comments','results'));
     }
 
     public function deleteproject(Request $request)
@@ -190,9 +248,43 @@ class UserController extends Controller
         $project = Project::find($id);
 
         $project->delete();
-        return redirect('/dashboard');
-    }
+        if($request->get('page') == '1')
+        {
+            return redirect('/dashboard/archieve');
+        }
+        else
+        {
+            return redirect('/dashboard');
+        }
 
+    }
+    public function delete_project_all(Request $request)
+    {
+        $id = $request->get('id');
+        if($id == '0')
+        {
+            $projects = Project::where('status','1')->get();
+            foreach($projects as $item)
+            {
+                $tasks = Task::where('project_id',$item->id)->get();
+                foreach($tasks as $taskitem)
+                {
+                    $taskitem->delete();
+                }
+                $comments = Comment::where('project_id',$item->id)->get();
+                foreach($comments as $commentitem)
+                {
+                    $commentitem->delete();
+                }
+                $item->delete();
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     public function movetoarchieve(Request $request)
     {
         $id = $request->get('id');
@@ -231,7 +323,6 @@ class UserController extends Controller
     {
         $id = $request->get('id');
         $project = Project::find($id);
-        $project->title = $request->get('title');
         $project->description = $request->get('description');
         $project->date = $request->get('date');
         $project->save();
@@ -240,10 +331,21 @@ class UserController extends Controller
 
     public function create_task(Request $request)
     {
+
+        $attach = "";
+        if($request->file('attach'))
+        {
+            $attach = "taskAttach".time().'.'.$request->file('attach')->getClientOriginalExtension();
+
+            $request->file('attach')->move(public_path('upload/attach'),$attach);
+        }
+
         $id = $request->get('id');
         $task = Task::create([
             'project_id'        => $id,
+            'title'             => $request->get('title'),
             'description'       => $request->get('description'),
+            'attach'            => $attach,
             'status'            => '0'
         ]);
         return true;
@@ -253,10 +355,34 @@ class UserController extends Controller
     {
         $id = $request->get('id');
         $task = Task::find($id);
-        $task->description = $request->get('description');
-        $task->status = $request->get('status');
-        $task->save();
-        return true;
+        if($task)
+        {
+            $task->title = $request->get('title');
+            $task->description = $request->get('description');
+            $task->status = $request->get('status');
+            $task->save();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function complete_task(Request $request)
+    {
+        $id = $request->get('id');
+        $task = Task::find($id);
+        if($task)
+        {
+            $task->status = $request->get('status');
+            $task->save();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public function uploadattach(Request $request)
@@ -278,14 +404,42 @@ class UserController extends Controller
 
     public function create_comment(Request $request)
     {
-        $id = $request->get('id');
-        $comment = Comment::create([
-            'project_id'        => $id,
-            'user_id'           => Auth::user()->id,
-            'task_id'           => $request->get('taskid'),
-            'content'           => $request->get('comment')
-        ]);
-        return true;
+        $commentid = $request->get('commentid');
+        if(!empty($commentid))
+        {
+            $comment = Comment::find($commentid);
+            $comment->content = $request->get('comment');
+            $comment->save();
+            return true;
+        }
+        else
+        {
+            $id = $request->get('id');
+            $comment = Comment::create([
+                'project_id'        => $id,
+                'user_id'           => Auth::user()->id,
+                'task_id'           => $request->get('taskid'),
+                'content'           => $request->get('comment')
+            ]);
+            return true;
+        }
+
+    }
+
+    public function delete_comment(Request $request)
+    {
+        $commentid = $request->get('cid');
+        if(!empty($commentid))
+        {
+            $comment = Comment::find($commentid);
+            $comment->delete();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
     }
 
     public function create_invite(Request $request)
@@ -324,10 +478,17 @@ class UserController extends Controller
     public function create_user(Request $request)
     {
         $email = $request->get('email');
+        $name = $request->get('name');
         $existMail = User::where('email',$email)->count();
+        $existName = User::where('name',$name)->count();
         if($existMail > 0)
         {
             $result = "email";
+            return response()->json($result);
+        }
+        elseif($existName > 0)
+        {
+            $result = "name";
             return response()->json($result);
         }
         else
@@ -335,12 +496,52 @@ class UserController extends Controller
             $password = $request->get('password');
             $user = User::create([
 
-                'name'              => $request->get('name'),
+                'name'              => $name,
                 'email'             => $email,
                 'paid'              => '0',
                 'password'          => Hash::make($password),
-                'role'              => '1'
+                'role'              => '1',
+                'plan'              => $request->get('plan')
             ]);
+            return true;
+        }
+
+    }
+
+    public function edit_user(Request $request)
+    {
+        $id = $request->get('id');
+        $emailcon = new User;
+        $namecon = new User;
+        $emailcon = $emailcon->whereNotIn('id', array($id));
+        $namecon = $namecon->whereNotIn('id', array($id));
+
+        $email = $request->get('email');
+        $name = $request->get('name');
+        $existName = $namecon->where('name',$name)->count();
+        $existMail = $emailcon->where('email',$email)->count();
+
+        if($existMail > 0)
+        {
+            $result = "email";
+            return response()->json($result);
+        }
+        elseif($existName > 0)
+        {
+            $result = "name";
+            return response()->json($result);
+        }
+        else
+        {
+            $cur_user = User::find($id);
+            $cur_user->name = $name;
+            $cur_user->email = $email;
+            $cur_user->plan = $request->get('plan');
+            if($request->get('password'))
+            {
+                $cur_user->password = Hash::make($request->get('password'));
+            }
+            $cur_user->save();
             return true;
         }
 
@@ -351,11 +552,53 @@ class UserController extends Controller
         $plan = Plan::create([
 
             'period'       => $request->get('period'),
-            'price'        => $request->get('price')
+            'price'        => $request->get('price'),
+            'name'        => $request->get('name')
         ]);
         return true;
 
     }
+
+    public function delete_message(Request $request)
+    {
+        $id = $request->get('id');
+        if($id=='0')
+        {
+            $messages = Contact::all();
+            foreach($messages as $item)
+            {
+                $item->delete();
+            }
+            return true;
+        }
+        else
+        {
+            $message = Contact::find($id);
+            $message->delete();
+            return true;
+        }
+
+
+
+
+    }
+
+    public function messageview(Request $request,$id)
+    {
+        $message = Contact::find($id);
+        if($message)
+        {
+             $page = 'inbox';
+            return view('user.inboxview',compact('page','message'));
+        }
+        else
+        {
+            return redirect('/dashboard/inbox');
+        }
+
+    }
+
+
 
     public function plan(Request $request)
     {
@@ -365,9 +608,10 @@ class UserController extends Controller
     }
     public function user(Request $request)
     {
+        $plans = Plan::all();
         $users = User::all();
         $page = "user";
-        return view('user.user',compact('page','users'));
+        return view('user.user',compact('page','users','plans'));
     }
     public function managerplan(Request $request)
     {

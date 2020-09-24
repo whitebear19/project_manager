@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('role')->nullable();
             $table->string('plan')->nullable();
             $table->string('paid')->nullable();
+            $table->timestamp('expired')->nullable();
             $table->string('project_id')->nullable();
             $table->rememberToken();
             $table->timestamps();

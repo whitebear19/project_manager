@@ -20,9 +20,12 @@
                 <option value="">Latest</option>
             </select>
         </div>
-        <div class="col-md-4">
-            <a href="{{ route('newproject') }}" class="btn btn-primary">Create New Project</a>
-        </div>
+        @if (Auth::user()->role == '1')
+            <div class="col-md-4">
+                <a href="{{ route('newproject') }}" class="btn btn-primary">Create New Project</a>
+            </div>
+        @endif
+
         @endif
     </div>
     <div class="row">
@@ -33,7 +36,7 @@
                         <a href="{{ url('/dashboard/project',$item['id']) }}">
                             <div class="project_item">
                                 <div>
-                                    <i class="fas fa-folder"></i>
+                                <i class="fas fa-folder" style="color:{{ $item['color'] }}"></i>
                                     <span class="project_title">
                                         {{ $item['title'] }}
                                     </span>

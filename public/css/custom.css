@@ -2,6 +2,7 @@
 .vertical-middle{display: flex;align-items: center;}
 .mt-50{margin-top:50px;}
 nav{background-color: #222222;}
+.fs-18{font-size: 18px;}
 .banner h1{
     font-size: 32px;
 }
@@ -25,7 +26,7 @@ nav{background-color: #222222;}
 /* -----------main------------- */
 main{min-height: 500px;}
 /* -----------footer----------- */
-footer{background-color: #222222;color: white;}
+footer{background-color: #222222;color: white;margin-top:20px;}
 .text-center{text-align: center;}
 .footer_social_link{padding: 0px;display: inline-block;}
 .footer_social_link li{list-style-type: none;float: left;margin:0 5px;}

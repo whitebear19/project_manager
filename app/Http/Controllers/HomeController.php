@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Contact;
 class HomeController extends Controller
 {
     /**
@@ -32,5 +32,16 @@ class HomeController extends Controller
     public function contactus()
     {
         return view('contactus');
+    }
+
+    public function storecontactus(Request $request)
+    {
+        Contact::create([
+            'name'   => $request->get('name'),
+            'email'  => $request->get('email'),
+            'content'  => $request->get('content')
+        ]);
+        session()->flash('message', "Successfuly sent!.");
+        return back();
     }
 }

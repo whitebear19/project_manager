@@ -63,12 +63,24 @@
                 <p>Payment</p>
                 </a>
             </li>
+            <li class="nav-item @if($page=="inbox") active @endif">
+                <a class="nav-link" href="{{ route('inbox') }}">
+                <i class="fas fa-inbox"></i>
+                <p>Inbox</p>
+                </a>
+            </li>
           @endif
           @if (Auth::user()->role > 0)
           <li class="nav-item @if($page=="archieve") active @endif">
             <a class="nav-link" href="{{ route('archieve') }}">
               <i class="material-icons">content_paste</i>
               <p>Archieve</p>
+            </a>
+          </li>
+          <li class="nav-item @if($page=="deadline") active @endif">
+            <a class="nav-link" href="{{ route('deadline') }}">
+                <i class="fas fa-calendar-week"></i>
+              <p>Deadlines</p>
             </a>
           </li>
           <li class="nav-item @if($page=="settings") active @endif">
@@ -84,8 +96,25 @@
       </div>
     </div>
     <div class="main-panel">
+        @if (Auth::user()->role == 1)
+            <div class="row" style="margin-top:10px;">
+                <div class="col-md-12">
+
+                    <div class="text-center">
+                        <p>
+                            <span style="font-weight:600;">Expires:</span>
+                            <span>
+                                {{ date('d-m-Y', strtotime(Auth::user()->expired)) }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        @endif
+
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+
         <div class="container-fluid">
           <div class="navbar-wrapper">
             <a class="navbar-brand" href="javascript:;">Dashboard</a>
@@ -97,6 +126,7 @@
             <span class="navbar-toggler-icon icon-bar"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-end">
+
             <form class="navbar-form">
               <div class="input-group no-border">
                 <input type="text" value="" class="form-control" placeholder="Search...">

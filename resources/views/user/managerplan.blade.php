@@ -83,8 +83,13 @@
                 </div>
                 <br>
                 <div class="form-group">
-                    <label for="">Price</label>
+                    <label for="">Price($)</label>
                     <input type="text" name="price" id="plan_price" class="form-control">
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="">Name</label>
+                    <input type="text" name="name" id="plan_name" class="form-control">
                 </div>
 
             </div>
@@ -117,7 +122,7 @@
                     if(result == '1')
                     {
                         $('#addUserModal').modal('hide');
-                        swal({ title:"Successfuly sent!", text: "", type: "success", buttonsStyling: false, confirmButtonClass: "btn btn-success"});
+                        swal({ title:"Successfuly Stored!", text: "", type: "success", buttonsStyling: false, confirmButtonClass: "btn btn-success"});
                         location.reload();
                     }
                     else
