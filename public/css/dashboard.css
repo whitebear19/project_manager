@@ -69,5 +69,13 @@ button{cursor: pointer;}
 }
 
 .main-panel>.content {
-    margin-top: 20px;
+    margin-top: 40px;
 }
+.ul-list-none{padding:0px;}
+.ul-list-none li{list-style-type: none;margin-bottom: 10px;}
+.comment-border{border: 1px solid #dedede;padding:5px;}
+
+.modal-footer {
+    justify-content: space-around;
+}
+.text-cross{text-decoration: line-through;}

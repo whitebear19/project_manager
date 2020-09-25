@@ -24,6 +24,15 @@
     </div>
     <br>
     <div class="row">
+        @if (count($results)>0)
+            <div class="col-md-12 text-right">
+                <input type="checkbox" name="" id="select_all">
+                <button type="button" class="btn_trans btn_col_red btn_message_all" disabled>Delete All</button>
+            </div>
+        @endif
+    </div>
+    <br>
+    <div class="row">
         <div class="col-md-12">
 
             <table class="table">
@@ -52,14 +61,7 @@
             </table>
         </div>
     </div>
-    <div class="row">
-        @if (count($results)>0)
-            <div class="col-md-12">
-                <input type="checkbox" name="" id="select_all">
-                <button type="button" class="btn_trans btn_col_red btn_message_all" disabled>Delete All</button>
-            </div>
-        @endif
-    </div>
+
 
 </div>
 <script type="text/javascript">

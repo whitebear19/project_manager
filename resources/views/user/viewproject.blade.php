@@ -34,15 +34,23 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="form-group">
-                            <label for="">Description<span style="color: red;">*</span></label>
-                            <textarea type="text" name="description" id="description" class="form-control" @if (Auth::user()->role < 1)
+                            <div class="text-center">
+                                <label for="" class="text-border" style="border: 1px solid #222222;padding:5px;border-radius:5px;">Description<span style="color: red;">*</span></label>
+                            </div>
+
+                            <textarea type="text" name="description" id="description" rows="6" class="form-control" @if (Auth::user()->role < 1)
                                 readonly
                             @endif>{{ $project->description }}</textarea>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="">Set a Due date(Optional)</label>
+                            <div class="text-center">
+                                <label for="">Set a Due date(Optional)</label>
+                                <br>
+                                <i class="fas fa-calendar-week" style="font-size: 80px;color:#20a4b9;" aria-hidden="true"></i>
+                                <br>
+                            </div>
                             <br>
                             <input type="date" name="date" id="" class="form-control" value="{{ $project->date }}" @if (Auth::user()->role < 1)
                             readonly
@@ -84,7 +92,9 @@
                                     <input type="checkbox" data-id="{{ $item['id'] }}" class="chk_task_id" @if ($item['status'] == 1) checked @endif>
                                 </td>
                                 <td class="">
-                                    {{ $item['title'] }}
+                                    <span data-content="{{ $item['description'] }}" data-attach="{{ $item['attach'] }}" class="btn_viewTaskContent @if ($item['status'] == 1)
+                                        text-cross
+                                    @endif" data-toggle="modal" data-target="#viewTaskContent">{{ $item['title'] }}</span>
                                 </td>
                                 <td class="td-actions text-right">
                                     <form action="{{ route('deletetask') }}" method="POST" style="display: inline-block;">
@@ -154,27 +164,26 @@
                 <br>
 
                 <div class="height_fixed400">
-
-                    <table class="table">
-                        <tbody>
-                            @foreach ($comments as $item)
-                                <tr>
-                                    <td>
-                                        <span style="font-weight: 600;">{{ $item->user->name }} :</span>
-                                        <p>{{ $item->content }}</p>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    <ul class="ul-list-none">
+                        @foreach ($comments as $item)
+                            <li class="comment-border">
+                                 <span style="font-weight: 600;">{{ $item->user->name }} :</span>
+                                <span>{{ $item->content }}</span>
+                                @if (!empty($item->attach))
+                                    <br>
+                                    <a href="/upload/attach/{{ $item->attach }}" download="">{{ $item->attach }}</a>
+                                @endif
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
                 <div class="form-group">
                     <form action="" id="comment-form" method="POST">
                         @csrf
                         <input type="hidden" name="id" value="{{ $project->id }}">
-                        <input type="hidden" name="taskid" value="4">
-                        <textarea name="comment" id="comment" class="form-control" rows="2"></textarea>
-                        <button type="button" id="btn-comment" class="btn btn-info btn-round">
+                        <input type="hidden" name="taskid" value="">
+                        <textarea name="comment" id="comment" class="form-control" rows="2" required></textarea>
+                        <button type="button" id="btn_comment_page" class="btn btn-info btn-round">
                             Post
                         </button>
                     </form>
@@ -183,8 +192,8 @@
                 <div class="form-group">
                     @if (Auth::user()->role == 1)
                         <div>
-                            <a class="btn btn-success" href="{{ route('dashboard') }}">Save</a>&nbsp;&nbsp;
-                            <a class="btn btn-error" href="{{ route('dashboard') }}">Cancel</a>&nbsp;&nbsp;
+                            <a class="btn btn-success" href="{{ route('dashboard') }}">Return</a>&nbsp;&nbsp;
+
                             @if ($project->status == '0')
                                 <form action="{{ route('movetoarchieve') }}" style="display: inline-block" method="post">
                                     @csrf
@@ -253,7 +262,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Description</label>
-                    <input type="text" name="description" id="task_description" class="form-control">
+                    <textarea type="text" name="description" rows="5" id="task_description" class="form-control"></textarea>
                 </div>
                 <div class="form-group">
                     <label class="btn btn-success btn-round tg-fileuploadlabel" for="task_attach">
@@ -294,7 +303,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Description</label>
-                    <input type="text" id="task_descriptionEdit" name="description" class="form-control">
+                    <textarea type="text" id="task_descriptionEdit" rows="5" name="description" class="form-control"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -327,7 +336,7 @@
         </div>
         <form action="" id="comment-formM" method="post">
             @csrf
-            <input type="hidden" name="id" value="{{ $project->id }}">
+            <input type="hidden" name="id" id="proejct_id" value="{{ $project->id }}">
             <input type="hidden" name="taskid" id="taskidM" value="">
             <input type="hidden" name="commentid" id="commentidM" value="">
             <div class="modal-body">
@@ -336,13 +345,49 @@
                     <label for="">Content</label>
                     <textarea name="comment" id="commentM" class="form-control" rows="2"></textarea>
                 </div>
+                <div class="form-group">
+                    <label class="btn btn-success btn-round tg-fileuploadlabel" for="comment_attach">
+
+                        <span class="text-color-green" style="line-height:15px;">Add Attachment</span>
+                        <input id="comment_attach" class="tg-fileinput" type="file" name="" autocomplete="off" accept=".jpg, .jpeg, .png">
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer commentModalFooter">
+                <button type="button" id="btn-commentD" class="btn btn-denger" data-cid="">Delete</button>
+                <button type="button" class="btn btn-secondary btn-normal" data-dismiss="modal">Close</button>
+                <button type="button" id="btn-commentM" class="btn btn-primary">Save</button>
+
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{{-- ---------------------------------- --}}
+
+<div class="modal fade" id="viewTaskContent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="commentModalTitle">View Task Content</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+            <div class="modal-body">
+
+                <div class="form-group">
+                   <p class="text_taskContent">
+                   </p>
+                   <a href="" download class="attach_taskContent"></a>
+                </div>
+
             </div>
             <div class="modal-footer commentModalFooter">
                 <button type="button" class="btn btn-secondary btn-normal" data-dismiss="modal">Close</button>
-                <button type="button" id="btn-commentM" class="btn btn-primary">Save</button>
-                <button type="button" id="btn-commentD" class="btn btn-denger" data-cid="">Delete</button>
             </div>
-        </form>
+
       </div>
     </div>
   </div>
@@ -404,7 +449,6 @@
                 formdata.append('title',$("#task_title").val());
                 formdata.append('description',$("#task_description").val());
                 formdata.append('_token',$('meta[name=csrf-token]').attr("content"));
-                formdata.append('attach',file.files[0]);
                 if (file.files[0])
                 {
 
@@ -538,22 +582,72 @@
 
         });
 
+        $(document).on('click','#btn_comment_page',function(){
+            var data = $('#comment-form').serialize();
+            if($('#comment').val()=='')
+            {
+                return false;
+            }
+            $.ajax({
+                url:"/ajax/create_comment",
+                type: 'post',
+                dataType: 'json',
+                data: data,
+
+                success: function(result){
+                    if(result)
+                    {
+                        location.reload();
+                    }
+                }
+            });
+        });
 
 
         $(document).on('click','#btn-comment',function(){
-            var data = $("#comment-form").serialize();
+            var file = document.getElementById('comment_attach');
+            var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'doc', 'docx', 'xls', 'xlsx'];
+
             if($('#comment').val() == '')
             {
                 return false;
             }
             else
             {
+
+                var formdata = new FormData;
+                formdata.append('comment',$("#commentM").val());
+                formdata.append('id',$("#proejct_id").val());
+                formdata.append('taskid',$("#taskidM").val());
+                formdata.append('commentid',$("#commentidM").val());
+
+                formdata.append('_token',$('meta[name=csrf-token]').attr("content"));
+                formdata.append('attach',file.files[0]);
+                if (file.files[0])
+                {
+
+                    if ($.inArray(file.files[0]['name'].split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : "+fileExtension.join(', '));
+                        $("#task_attach").val("");
+                        return false;
+                    }
+                    if(file.files[0].size > 2000000)
+                    {
+                        alert("File size should be less than 2Mb.");
+                        return false;
+                    }
+                    formdata.append('attach',file.files[0]);
+
+                }
+
                 $.ajax({
                     url:"/ajax/create_comment",
                     type: 'post',
                     dataType: 'json',
-                    data: data,
+                    data: formdata,
 
+                    processData: false,
+                    contentType: false,
                     success: function(result){
                         if(result)
                         {
@@ -611,23 +705,48 @@
         });
 
         $(document).on('click','#btn-commentM',function(){
-            var data = $("#comment-formM").serialize();
+            var file = document.getElementById('comment_attach');
+            var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'doc', 'docx', 'xls', 'xlsx'];
+
             if($('#commentM').val() == '')
-            {
-                return false;
-            }
-            else if($('#commentM').val() == '')
             {
                 return false;
             }
             else
             {
+                var formdata = new FormData;
+                formdata.append('comment',$("#commentM").val());
+                formdata.append('id',$("#proejct_id").val());
+                formdata.append('taskid',$("#taskidM").val());
+                formdata.append('commentid',$("#commentidM").val());
+
+                formdata.append('_token',$('meta[name=csrf-token]').attr("content"));
+
+                if (file.files[0])
+                {
+
+                    if ($.inArray(file.files[0]['name'].split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : "+fileExtension.join(', '));
+                        $("#task_attach").val("");
+                        return false;
+                    }
+                    if(file.files[0].size > 2000000)
+                    {
+                        alert("File size should be less than 2Mb.");
+                        return false;
+                    }
+                    formdata.append('attach',file.files[0]);
+
+                }
+
                 $.ajax({
                     url:"/ajax/create_comment",
                     type: 'post',
                     dataType: 'json',
-                    data: data,
+                    data: formdata,
 
+                    processData: false,
+                    contentType: false,
                     success: function(result){
                         if(result)
                         {
@@ -722,7 +841,17 @@
                 }
             }
         });
-
+        $(document).ready(function(){
+            $(document).on('click','.btn_viewTaskContent',function(){
+                $('.text_taskContent').html($(this).data('content'));
+                var attach = $(this).data('attach');
+                if(attach !='')
+                {
+                    $(".attach_taskContent").attr('href','/upload/attach/'+attach);
+                    $(".attach_taskContent").html(attach);
+                }
+            });
+        });
     });
 </script>
 @endsection

@@ -19,25 +19,42 @@
                                 <tr>
                                     <td><b>Name</b></td>
                                     <td><b>Email</b></td>
+                                    <td><b>Plan</b></td>
+                                    <td><b>Paid</b></td>
+                                    <td><b>Expired</b></td>
                                     <td><b>Action</b></td>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($users as $item)
+                                @foreach ($result as $item)
                                     <tr>
                                         <td>
-                                            {{ $item->name }}
+                                            {{ $item['name'] }}
                                         </td>
                                         <td>
-                                            {{ $item->email }}
+                                            {{ $item['email'] }}
                                         </td>
                                         <td>
-                                            <button type="button" rel="tooltip" data-id="{{ $item->id }}" data-name="{{ $item->name }}" data-email="{{ $item->email }}" data-period="{{ $item->plan }}" data-toggle="modal" data-target="#editUserModal" class="btn btn-success btn-mini btn-editUser">
+                                            {{ $item['plan'] }}
+                                        </td>
+                                        <td>
+                                            @if ($item['paid'] == '1')
+                                                Paid
+                                            @else
+                                                Unpaid
+                                            @endif
+
+                                        </td>
+                                        <td>
+                                            {{ date('d-m-Y', strtotime($item['expired'])) }}
+                                        </td>
+                                        <td>
+                                            <button type="button" rel="tooltip" data-id="{{ $item['id'] }}" data-name="{{ $item['name'] }}" data-email="{{ $item['email'] }}" data-period="{{ $item['plan'] }}" data-toggle="modal" data-target="#editUserModal" class="btn btn-success btn-mini btn-editUser">
                                                 <i class="material-icons">edit</i>
                                             </button>
                                             <form action="{{ route('deleteuser') }}" method="POST" style="display: inline-block;">
                                                 @csrf
-                                                <input type="hidden" name="id" value="{{ $item->id }}">
+                                                <input type="hidden" name="id" value="{{ $item['id'] }}">
                                                 <button type="submit" rel="tooltip" class="btn btn-danger btn-mini">
                                                     <i class="material-icons">close</i>
                                                 </button>

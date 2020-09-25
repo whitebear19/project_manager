@@ -7,7 +7,7 @@
            <p class="dash_title">Manager Plan</p>
         </div>
         <div class="col-md-6" style="text-align: right;">
-            <button class="btn btn-success" data-toggle="modal" data-target="#addPlanModal">Add Plan</button>
+            <button class="btn btn-success" id="btn_addPlan" data-toggle="modal" data-target="#addPlanModal">Add Plan</button>
          </div>
         <div class="col-md-12">
 
@@ -17,6 +17,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <td><b>Name</b></td>
                                     <td><b>Period</b></td>
                                     <td><b>Price</b></td>
                                     <td><b>Action</b></td>
@@ -26,12 +27,18 @@
                                 @foreach ($plans as $item)
                                     <tr>
                                         <td>
+                                            {{ $item->name }}
+                                        </td>
+                                        <td>
                                             {{ $item->period }} &nbsp; Month
                                         </td>
                                         <td>
                                             ${{ $item->price }}
                                         </td>
                                         <td>
+                                            <button type="button" rel="tooltip" data-id="{{ $item->id }}" data-period="{{ $item->period }}" data-name="{{ $item->name }}" data-price="{{ $item->price }}" data-toggle="modal" data-target="#addPlanModal" id="btn_editPlan" class="btn btn-success btn-mini btn-editUser">
+                                                <i class="material-icons">edit</i>
+                                            </button>
                                             <form action="{{ route('deleteplan') }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $item->id }}">
@@ -56,13 +63,14 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Plan</h5>
+          <h5 class="modal-title" id="planTitle">Add Plan</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <form action="" id="addPlan-form" method="post">
             @csrf
+            <input type="hidden" name="id" id="plan_id">
             <div class="modal-body">
                 <div class="form-group">
                     <label for="">Period</label>
@@ -101,12 +109,18 @@
       </div>
     </div>
   </div>
+
+
 <script type="text/javascript">
     $(document).ready(function(){
         $(document).on('click','#btn-addPlan',function(){
 
         var data = $("#addPlan-form").serialize();
         if($('#plan_price').val() == '')
+        {
+            return false;
+        }
+        else if($('#plan_name').val() == '')
         {
             return false;
         }
@@ -134,6 +148,26 @@
             });
         }
         });
+
+        $(document).on('click','#btn_editPlan',function(){
+            $('#planTitle').html("Edit Plan");
+            $('#plan_id').val($(this).data('id'));
+            $('#plan_price').val($(this).data('price'));
+            $('#plan_name').val($(this).data('name'));
+            var period = $(this).data('period');
+            $("#plan_period").val(period).prop('selected', true);
+            $('#btn-addPlan').html('Store');
+        });
+
+        $(document).on('click','#btn_addPlan',function(){
+            $('#planTitle').html("Add Plan");
+            $('#plan_id').val('0');
+            $('#plan_price').val('');
+            $('#plan_name').val('');
+            $('#btn-addPlan').html('Add');
+            $("#plan_period").val('');
+        });
+
     });
 </script>
 @endsection

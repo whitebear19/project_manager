@@ -14,15 +14,32 @@
                     <input type="text" name="title" id="title" class="form-control" required>
                 </div>
                 <br>
-                <div class="form-group">
-                    <label for="">Description<span style="color: red;">*</span></label>
-                    <textarea type="text" name="description" id="description" class="form-control" required></textarea>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="text-center">
+                                <label for="" class="text-border" style="border: 1px solid #222222;padding:5px;border-radius:5px;">Description<span style="color: red;">*</span></label>
+                            </div>
+
+                            <textarea type="text" name="description" id="description" rows="6" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="text-center">
+                                <label for="">Set a Due date(Optional)</label>
+                                <br>
+                                <i class="fas fa-calendar-week" style="font-size: 80px;color:#20a4b9;" aria-hidden="true"></i>
+                                <br>
+                            </div>
+                            <br>
+                            <input type="date" name="date" id="" class="form-control">
+                        </div>
+                    </div>
                 </div>
-                <br>
-                <div class="form-group">
-                    <label for="">Set a Due date(Optional)</label>
-                    <input type="date" name="date" id="" class="form-control">
-                </div>
+
+
                 <div class="form-group">
                     <label for="">Select Color</label>&nbsp;&nbsp;
                     <input type="color" name="color">

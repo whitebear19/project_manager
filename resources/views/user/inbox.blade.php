@@ -3,9 +3,15 @@
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-md-6">
            <p class="dash_title">Inbox</p>
         </div>
+        @if (count($contacts)>0)
+            <div class="col-md-6 text-right">
+                <input type="checkbox" name="" id="select_all">
+                <button type="button" class="btn_trans btn_col_red btn_message_all" disabled>Delete All</button>
+            </div>
+        @endif
         <div class="col-md-12">
             <form action="" id="inbox_form" method="post">
                 @csrf
@@ -28,12 +34,7 @@
                 </table>
             </form>
         </div>
-        @if (count($contacts)>0)
-            <div class="col-md-12">
-                <input type="checkbox" name="" id="select_all">
-                <button type="button" class="btn_trans btn_col_red btn_message_all" disabled>Delete All</button>
-            </div>
-        @endif
+
 
     </div>
 </div>

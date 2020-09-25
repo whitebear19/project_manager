@@ -73,7 +73,7 @@ class UserController extends Controller
 
         if(Auth::user()->role > 1)
         {
-            $projects = Project::where('status','0')->get();
+            return redirect('dashboard/user');
         }
         else
         {
@@ -224,6 +224,7 @@ class UserController extends Controller
             $data['title'] = $item->title;
             $data['description'] = $item->description;
             $data['status'] = $item->status;
+            $data['attach'] = $item->attach;
             $comment = Comment::where('task_id',$item->id)->where('user_id',Auth::user()->id)->first();
             if(!empty($comment))
             {
@@ -404,11 +405,24 @@ class UserController extends Controller
 
     public function create_comment(Request $request)
     {
+
+        $attach = '';
+        if($request->file('attach'))
+        {
+            $attach = "commentAttach".time().'.'.$request->file('attach')->getClientOriginalExtension();
+            $request->file('attach')->move(public_path('upload/attach'),$attach);
+        }
+
         $commentid = $request->get('commentid');
         if(!empty($commentid))
         {
+
             $comment = Comment::find($commentid);
             $comment->content = $request->get('comment');
+            if($attach != "")
+            {
+                $comment->attach = $attach;
+            }
             $comment->save();
             return true;
         }
@@ -419,7 +433,8 @@ class UserController extends Controller
                 'project_id'        => $id,
                 'user_id'           => Auth::user()->id,
                 'task_id'           => $request->get('taskid'),
-                'content'           => $request->get('comment')
+                'content'           => $request->get('comment'),
+                'attach'           => $attach
             ]);
             return true;
         }
@@ -549,13 +564,25 @@ class UserController extends Controller
 
     public function create_plan(Request $request)
     {
-        $plan = Plan::create([
+        if($request->get('id')=='0')
+        {
+            $plan = Plan::create([
 
-            'period'       => $request->get('period'),
-            'price'        => $request->get('price'),
-            'name'        => $request->get('name')
-        ]);
-        return true;
+                'period'       => $request->get('period'),
+                'price'        => $request->get('price'),
+                'name'        => $request->get('name')
+            ]);
+            return true;
+        }
+        else
+        {
+            $plan = Plan::find($request->get('id'));
+            $plan->price = $request->get('price');
+            $plan->period = $request->get('period');
+            $plan->name = $request->get('name');
+            $plan->save();
+            return true;
+        }
 
     }
 
@@ -609,9 +636,30 @@ class UserController extends Controller
     public function user(Request $request)
     {
         $plans = Plan::all();
-        $users = User::all();
+        $users = User::whereNotIn('role', array('2'))->get();
+        $data = array();
+        $result = array();
+        foreach($users as $item)
+        {
+            $data['id'] = $item->id;
+            $data['name'] = $item->name;
+            $data['email'] = $item->email;
+            $plan = Plan::where('period',$item->plan)->first();
+            if(!empty($plan))
+            {
+                $data['plan'] = $plan->name;
+            }
+            else
+            {
+                $data['plan'] = '';
+            }
+            $data['paid'] = $item->paid;
+            $data['expired'] = $item->expired;
+            array_push($result,$data);
+        }
+
         $page = "user";
-        return view('user.user',compact('page','users','plans'));
+        return view('user.user',compact('page','users','plans','result'));
     }
     public function managerplan(Request $request)
     {

@@ -37,12 +37,15 @@
         </a></div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="nav-item @if($page=="dashboard") active @endif">
-            <a class="nav-link" href="{{ route('dashboard') }}">
-              <i class="material-icons">dashboard</i>
-              <p>Projects</p>
-            </a>
-          </li>
+            @if (Auth::user()->role == '1')
+                <li class="nav-item @if($page=="dashboard") active @endif">
+                    <a class="nav-link" href="{{ route('dashboard') }}">
+                    <i class="material-icons">dashboard</i>
+                    <p>Projects</p>
+                    </a>
+                </li>
+            @endif
+
 
           @if(Auth::user()->role == '2')
             <li class="nav-item @if($page=="user") active @endif">
@@ -70,7 +73,7 @@
                 </a>
             </li>
           @endif
-          @if (Auth::user()->role > 0)
+          @if (Auth::user()->role == '1')
           <li class="nav-item @if($page=="archieve") active @endif">
             <a class="nav-link" href="{{ route('archieve') }}">
               <i class="material-icons">content_paste</i>
@@ -83,6 +86,8 @@
               <p>Deadlines</p>
             </a>
           </li>
+          @endif
+          @if (Auth::user()->role > 0)
           <li class="nav-item @if($page=="settings") active @endif">
             <a class="nav-link" href="{{ route('settings') }}">
               <i class="material-icons">library_books</i>
@@ -96,21 +101,7 @@
       </div>
     </div>
     <div class="main-panel">
-        @if (Auth::user()->role == 1)
-            <div class="row" style="margin-top:10px;">
-                <div class="col-md-12">
 
-                    <div class="text-center">
-                        <p>
-                            <span style="font-weight:600;">Expires:</span>
-                            <span>
-                                {{ date('d-m-Y', strtotime(Auth::user()->expired)) }}
-                            </span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        @endif
 
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
@@ -118,6 +109,19 @@
         <div class="container-fluid">
           <div class="navbar-wrapper">
             <a class="navbar-brand" href="javascript:;">Dashboard</a>
+            @if (Auth::user()->role == 1)
+                <div  style="margin-top:20px;margin-left:80px;">
+                    <div class="text-center">
+                        <p>
+                            <span style="font-weight:600;">Expires:</span>
+                            <span>
+                                {{ date('m-d-Y', strtotime(Auth::user()->expired)) }}
+                            </span>
+                            <a href="{{ route('plan') }}" class="btn btn-success">Renew</a>
+                        </p>
+                    </div>
+                </div>
+            @endif
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
