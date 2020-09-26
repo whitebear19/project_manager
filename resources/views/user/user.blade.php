@@ -49,7 +49,7 @@
                                             {{ date('d-m-Y', strtotime($item['expired'])) }}
                                         </td>
                                         <td>
-                                            <button type="button" rel="tooltip" data-id="{{ $item['id'] }}" data-name="{{ $item['name'] }}" data-email="{{ $item['email'] }}" data-period="{{ $item['plan'] }}" data-toggle="modal" data-target="#editUserModal" class="btn btn-success btn-mini btn-editUser">
+                                            <button type="button" rel="tooltip" data-id="{{ $item['id'] }}" data-name="{{ $item['name'] }}" data-email="{{ $item['email'] }}" data-period="{{ $item['period'] }}" data-toggle="modal" data-target="#editUserModal" class="btn btn-success btn-mini btn-editUser">
                                                 <i class="material-icons">edit</i>
                                             </button>
                                             <form action="{{ route('deleteuser') }}" method="POST" style="display: inline-block;">

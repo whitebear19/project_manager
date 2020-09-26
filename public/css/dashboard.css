@@ -79,3 +79,9 @@ button{cursor: pointer;}
     justify-content: space-around;
 }
 .text-cross{text-decoration: line-through;}
+.disp-none{display: none;}
+.input-border{border:1px solid #444444;padding:5px;}
+.table td {
+    vertical-align: middle;
+    border-top: none;
+}

@@ -38,9 +38,15 @@
                                 <label for="" class="text-border" style="border: 1px solid #222222;padding:5px;border-radius:5px;">Description<span style="color: red;">*</span></label>
                             </div>
 
-                            <textarea type="text" name="description" id="description" rows="6" class="form-control" @if (Auth::user()->role < 1)
+                            <textarea type="text" name="description" id="description" rows="6" class="form-control input-border" @if (Auth::user()->role < 1)
                                 readonly
                             @endif>{{ $project->description }}</textarea>
+                            <div class="text-center">
+                                @if (Auth::user()->role == 1)
+                                    <button type="button" id="project_update" class="btn btn-primary">Update</button>
+                                @endif
+                            </div>
+
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -48,11 +54,11 @@
                             <div class="text-center">
                                 <label for="">Set a Due date(Optional)</label>
                                 <br>
-                                <i class="fas fa-calendar-week" style="font-size: 80px;color:#20a4b9;" aria-hidden="true"></i>
+                                <i class="fas fa-calendar-week" id="btn_calander_show" style="font-size: 80px;color:#20a4b9;" aria-hidden="true"></i>
                                 <br>
                             </div>
                             <br>
-                            <input type="date" name="date" id="" class="form-control" value="{{ $project->date }}" @if (Auth::user()->role < 1)
+                            <input type="date" name="date" id="project_calander" class="form-control disp-none" value="{{ $project->date }}" @if (Auth::user()->role < 1)
                             readonly
                         @endif>
                         </div>
@@ -61,9 +67,7 @@
 
 
 
-                @if (Auth::user()->role == 1)
-                    <button type="button" id="project_update" class="btn btn-primary pull-right">Update</button>
-                @endif
+
 
             </form>
         </div>
@@ -84,11 +88,11 @@
                 </div>
 
                 <br>
-                <table class="table">
+                <table class="table input-border">
                     <tbody>
                         @foreach ($results as $item)
                             <tr>
-                                <td>
+                                <td width="20">
                                     <input type="checkbox" data-id="{{ $item['id'] }}" class="chk_task_id" @if ($item['status'] == 1) checked @endif>
                                 </td>
                                 <td class="">
@@ -96,8 +100,8 @@
                                         text-cross
                                     @endif" data-toggle="modal" data-target="#viewTaskContent">{{ $item['title'] }}</span>
                                 </td>
-                                <td class="td-actions text-right">
-                                    <form action="{{ route('deletetask') }}" method="POST" style="display: inline-block;">
+                                <td class="td-actions text-right" width="110">
+                                    <form action="{{ route('deletetask') }}" method="POST" style="display: inline-block;margin-bottom:0px;">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $item['id'] }}">
                                         <button type="submit" rel="tooltip" class="btn btn-danger">
@@ -122,20 +126,16 @@
 
         <div class="col-md-5">
             <div>
-                <div class="form-group" style="text-align: right;">
-                    @if (Auth::user()->role == 1)
-                        <label class="btn btn-success btn-round tg-fileuploadlabel" for="tg-photogallery1">
-
-                            <span class="text-color-green" style="line-height:15px;">Add Attachment</span>
-                            <input id="tg-photogallery1" class="tg-fileinput" type="file" name="" autocomplete="off" accept=".jpg, .jpeg, .png">
-                        </label>
-                    @endif
-
-                </div>
-                <br>
                 <div class="form-group">
                     <div class="text-center">
-                        <p class="item_title">List of Attachment</p>
+                        <p class="item_title">List of Attachment &nbsp;&nbsp;&nbsp;
+                            @if (Auth::user()->role == 1)
+                            <label class="btn btn-success btn-round tg-fileuploadlabel" for="tg-photogallery1">
+
+                                <span class="text-color-green" style="line-height:15px;">Add Attachment</span>
+                                <input id="tg-photogallery1" class="tg-fileinput" type="file" name="" autocomplete="off" accept=".jpg, .jpeg, .png">
+                            </label>
+                        @endif</p>
                     </div>
                     <br>
                     <table class="table">
@@ -163,10 +163,10 @@
                 </div>
                 <br>
 
-                <div class="height_fixed400">
+                <div class="height_fixed400 input-border">
                     <ul class="ul-list-none">
                         @foreach ($comments as $item)
-                            <li class="comment-border">
+                            <li class="">
                                  <span style="font-weight: 600;">{{ $item->user->name }} :</span>
                                 <span>{{ $item->content }}</span>
                                 @if (!empty($item->attach))
@@ -180,22 +180,28 @@
                 <div class="form-group">
                     <form action="" id="comment-form" method="POST">
                         @csrf
-                        <input type="hidden" name="id" value="{{ $project->id }}">
+                        <input type="hidden" name="id" id="project_id_page" value="{{ $project->id }}">
                         <input type="hidden" name="taskid" value="">
                         <textarea name="comment" id="comment" class="form-control" rows="2" required></textarea>
                         <button type="button" id="btn_comment_page" class="btn btn-info btn-round">
                             Post
                         </button>
+                        &nbsp;&nbsp;
+                        <label class="tg-fileuploadlabel" for="comment_attachPost">
+
+                            <span class="text-color-green" style="line-height:15px;color:#222222;cursor:pointer;"><i class="fas fa-paperclip"></i></span>
+                            <input id="comment_attachPost" class="tg-fileinput" type="file" name="attach" autocomplete="off" accept=".jpg, .jpeg, .png">
+                        </label>
                     </form>
                 </div>
 
                 <div class="form-group">
                     @if (Auth::user()->role == 1)
                         <div>
-                            <a class="btn btn-success" href="{{ route('dashboard') }}">Return</a>&nbsp;&nbsp;
+                            <a class="btn btn-success" href="{{ route('dashboard') }}" style="float: left;">Return</a>
 
                             @if ($project->status == '0')
-                                <form action="{{ route('movetoarchieve') }}" style="display: inline-block" method="post">
+                                <form action="{{ route('movetoarchieve') }}" style="display: inline-block; float:right;" method="post">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $project->id }}">
                                     <button type="submit" class="btn btn-info">Complete Project</button>
@@ -583,24 +589,56 @@
         });
 
         $(document).on('click','#btn_comment_page',function(){
-            var data = $('#comment-form').serialize();
-            if($('#comment').val()=='')
+
+            var file = document.getElementById('comment_attachPost');
+            var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'doc', 'docx', 'xls', 'xlsx'];
+
+            if($('#comment').val() == '')
             {
                 return false;
             }
-            $.ajax({
-                url:"/ajax/create_comment",
-                type: 'post',
-                dataType: 'json',
-                data: data,
+            else
+            {
+                var formdata = new FormData;
+                formdata.append('comment',$("#comment").val());
+                formdata.append('id',$("#project_id_page").val());
+                formdata.append('taskid','');
+                formdata.append('_token',$('meta[name=csrf-token]').attr("content"));
+                formdata.append('attach',file.files[0]);
+                if (file.files[0])
+                {
 
-                success: function(result){
-                    if(result)
-                    {
-                        location.reload();
+                    if ($.inArray(file.files[0]['name'].split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        alert("Only formats are allowed : "+fileExtension.join(', '));
+                        $("#task_attach").val("");
+                        return false;
                     }
+                    if(file.files[0].size > 2000000)
+                    {
+                        alert("File size should be less than 2Mb.");
+                        return false;
+                    }
+                    formdata.append('attach',file.files[0]);
+
                 }
-            });
+
+                $.ajax({
+                    url:"/ajax/create_comment",
+                    type: 'post',
+                    dataType: 'json',
+                    data: formdata,
+
+                    processData: false,
+                    contentType: false,
+                    success: function(result){
+                        if(result)
+                        {
+                           location.reload();
+                        }
+                    }
+                });
+            }
+
         });
 
         $(document).on('click','#btn-comment',function(){
@@ -848,6 +886,19 @@
                     $(".attach_taskContent").attr('href','/upload/attach/'+attach);
                     $(".attach_taskContent").html(attach);
                 }
+            });
+        });
+
+        $(document).ready(function(){
+            $('#btn_calander_show').click(function(){
+               if($('#project_calander').hasClass('disp-none'))
+               {
+                    $('#project_calander').removeClass('disp-none');
+               }
+               else
+               {
+                    $('#project_calander').addClass('disp-none');
+               }
             });
         });
     });

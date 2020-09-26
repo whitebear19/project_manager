@@ -107,16 +107,16 @@
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
 
         <div class="container-fluid">
-          <div class="navbar-wrapper">
-            <a class="navbar-brand" href="javascript:;">Dashboard</a>
+          <div class="navbar-wrapper" style="width: 100%;">
+
             @if (Auth::user()->role == 1)
-                <div  style="margin-top:20px;margin-left:80px;">
+                <div  style="margin-top:20px;width:100%;">
                     <div class="text-center">
                         <p>
                             <span style="font-weight:600;">Expires:</span>
                             <span>
                                 {{ date('m-d-Y', strtotime(Auth::user()->expired)) }}
-                            </span>
+                            </span>&nbsp;&nbsp;&nbsp;
                             <a href="{{ route('plan') }}" class="btn btn-success">Renew</a>
                         </p>
                     </div>
@@ -164,6 +164,7 @@
           </div>
         </div>
       </nav>
+
       <!-- End Navbar -->
       <div class="content">
         @yield('content')

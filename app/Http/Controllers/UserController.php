@@ -571,10 +571,28 @@ class UserController extends Controller
             $cur_user = User::find($id);
             $cur_user->name = $name;
             $cur_user->email = $email;
-            $cur_user->plan = $request->get('plan');
+
             if($request->get('password'))
             {
                 $cur_user->password = Hash::make($request->get('password'));
+            }
+
+            if(empty($cur_user->expired))
+            {
+                $now = date('Y-m-d', strtotime($request->get('plan').' months'));
+                $cur_user->paid = '1';
+                $cur_user->expired = $now;
+                $cur_user->plan = $request->get('plan');
+            }
+            else
+            {
+                if($cur_user->plan != $request->get('plan'))
+                {
+                    $now = date('Y-m-d', strtotime($cur_user->expired. ' + '.$request->get('plan').' months'));
+                    $cur_user->paid = '1';
+                    $cur_user->expired = $now;
+                    $cur_user->plan = $request->get('plan');
+                }
             }
             $cur_user->save();
             return true;
@@ -673,6 +691,7 @@ class UserController extends Controller
             {
                 $data['plan'] = '';
             }
+            $data['period'] = $item->plan;
             $data['paid'] = $item->paid;
             $data['expired'] = $item->expired;
             array_push($result,$data);
