@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
+use App\Models\Plan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,6 +29,11 @@ class DatabaseSeeder extends Seeder
             'plan' => '1',
             'paid' => '1',
             'password' => Hash::make('user1234'),
+        ]);
+        Plan::create([
+            'period'    => '1',
+            'price'     => '11',
+            'name'     => 'Basic'
         ]);
     }
 }
