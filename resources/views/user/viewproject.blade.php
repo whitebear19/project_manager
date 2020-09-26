@@ -603,7 +603,6 @@
             });
         });
 
-
         $(document).on('click','#btn-comment',function(){
             var file = document.getElementById('comment_attach');
             var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'doc', 'docx', 'xls', 'xlsx'];
@@ -614,7 +613,6 @@
             }
             else
             {
-
                 var formdata = new FormData;
                 formdata.append('comment',$("#commentM").val());
                 formdata.append('id',$("#proejct_id").val());
