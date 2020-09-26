@@ -69,6 +69,8 @@ Route::post('handle-payment', 'PayPalPaymentController@handlePayment')->name('ma
 Route::get('cancel-payment', 'PayPalPaymentController@paymentCancel')->name('cancel.payment');
 Route::get('payment-success', 'PayPalPaymentController@paymentSuccess')->name('success.payment');
 
+Route::post('/charge', 'SquareController@charge')->name('make.charge');
+
 
 
 

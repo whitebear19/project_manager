@@ -162,6 +162,26 @@ class UserController extends Controller
 
     public function update_square(Request $request)
     {
+        $square_user_namespace = str_replace(' ', '', $request->get('square_user_namespace'));
+        $square_application_id = str_replace(' ', '', $request->get('square_application_id'));
+        $square_token = str_replace(' ', '', $request->get('square_token'));
+        $square_location = str_replace(' ', '', $request->get('square_location'));
+
+        $env_update = $this->changeEnv([
+            'SQUARE_USER_NAMESPACE'   => $square_user_namespace,
+            'SQUARE_APPLICATION_ID'   => $square_application_id,
+            'SQUARE_TOKEN'            => $square_token,
+            'SQUARE_LOCATION'         => $square_location,
+        ]);
+        if($env_update){
+            return true;
+        } else {
+            return false;
+        }
+
+
+
+
 
     }
 

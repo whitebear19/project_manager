@@ -6,6 +6,7 @@ use Srmklive\PayPal\Services\ExpressCheckout;
 use Illuminate\Support\Facades\Auth;
 use Session;
 use App\User;
+use App\Models\Plan;
 class PayPalPaymentController extends Controller
 {
     public function __construct()
@@ -17,6 +18,7 @@ class PayPalPaymentController extends Controller
     {
         $product = [];
         $price = $request->get('price');
+        $plan = Plan::where('price',$price)->first();
         $product['items'] = [
             [
                 'name' => 'Plan',
@@ -38,6 +40,10 @@ class PayPalPaymentController extends Controller
         $res = $paypalModule->setExpressCheckout($product);
         $res = $paypalModule->setExpressCheckout($product, true);
 
+        $user = User::find(Auth::user()->id);
+
+        $user->plan = $plan->period;
+        $user->save();
         return redirect($res['paypal_link']);
     }
 
@@ -58,6 +64,15 @@ class PayPalPaymentController extends Controller
 
         $user = User::find(Auth::user()->id);
         $user->paid = 1;
+        if(empty($user->expired))
+        {
+            $now = date('Y-m-d', strtotime($user->plan.' months'));
+        }
+        else
+        {
+            $now = date('Y-m-d', strtotime($user->expired. ' + '.$user->plan.' months'));
+        }
+        $user->expired = $now;
         $user->save();
 
         return redirect('/dashboard');

@@ -64,12 +64,26 @@
                         <div id="area_paypal" class="text-center mt-30">
                             <form action="{{ route('make.payment') }}" method="post">
                                 @csrf
-                                <input type="hidden" required id="price" name="price" value="">
-                                <button type="submit" id="btn_pay" class="btn btn-info" disabled>Pay</button>
+                                <input type="hidden" required class="price" name="price" value="">
+                                <button type="submit" class="btn_pay btn btn-info" disabled>Pay</button>
                             </form>
                         </div>
                         <div id="area_square" class="text-center mt-30">
-                            square
+                            <form action="{{ route('make.charge') }}" method="post">
+                            @csrf
+                            <input type="hidden" required class="price" name="price" value="">
+                            <div class="form-group">
+                                <label for="">Card Nonce</label>
+                            <input type="text" name="card-nonce" class="form-control" value="" required>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <label for="">Location ID</label>
+                            <input type="text" name="location_id" class="form-control" value="" required>
+                            </div>
+                            <br>
+                            <button type="submit" class="btn_pay btn btn-info" disabled>Pay</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -96,17 +110,17 @@
             var price = this.value;
             if(price == "")
             {
-                $("#btn_pay").prop('disabled', true);
-                $("#btn_pay").html('Select Plan.');
-                $("#price").val(price);
+                $(".btn_pay").prop('disabled', true);
+                $(".btn_pay").html('Select Plan.');
+                $(".price").val(price);
                 swal({ title:"Something wrong!", text: "You have to select one.", type: "error", buttonsStyling: false, confirmButtonClass: "btn btn-success"});
                 return false;
             }
             else
             {
-                $("#price").val(price);
-                $("#btn_pay").prop('disabled', false);
-                $("#btn_pay").html('Pay with $'+price);
+                $(".price").val(price);
+                $(".btn_pay").prop('disabled', false);
+                $(".btn_pay").html('Pay with $'+price);
             }
         });
     });

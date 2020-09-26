@@ -44,10 +44,30 @@
 
             </div>
             <div class="card-body">
-                <form action="" method="POST">
+                <form action="" id="square-form" method="POST">
                     @csrf
+                    <div class="form-group">
+                        <label for="">SQUARE_USER_NAMESPACE</label>
+                    <input type="text" name="square_user_namespace" id="square_user_namespace" class="form-control" value="{{ env('SQUARE_USER_NAMESPACE') }}">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="">SQUARE_APPLICATION_ID</label>
+                    <input type="text" name="square_application_id" id="square_application_id" class="form-control" value="{{ env('SQUARE_APPLICATION_ID') }}">
+                    </div>
 
-                    <button type="button" class="btn btn-primary pull-right">Save</button>
+                    <br>
+                    <div class="form-group">
+                        <label for="">SQUARE_TOKEN</label>
+                    <input type="text" name="square_token" id="square_token" class="form-control" value="{{ env('SQUARE_TOKEN') }}">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="">SQUARE_LOCATION</label>
+                    <input type="text" name="square_location" id="square_location" class="form-control" value="{{ env('SQUARE_LOCATION') }}">
+                    </div>
+                    <br>
+                    <button type="button" id="square_save" class="btn btn-primary pull-right">Save</button>
                 </form>
 
             </div>
@@ -60,6 +80,28 @@
             var data = $("#paypal-form").serialize();
             $.ajax({
                 url:"/ajax/update_paypal",
+                type: 'post',
+                dataType: 'json',
+                data: data,
+
+                success: function(result){
+                    console.log(result);
+                    if(result)
+                    {
+                        swal({ title:"Successful updated!", text: "", type: "success", buttonsStyling: false, confirmButtonClass: "btn btn-success"});
+                    }
+                    else
+                    {
+                        swal({ title:"Something wrong!", text: "Please try again.", type: "error", buttonsStyling: false, confirmButtonClass: "btn btn-success"});
+                    }
+                }
+            });
+
+        });
+        $(document).on('click','#square_save',function(){
+            var data = $("#square-form").serialize();
+            $.ajax({
+                url:"/ajax/update_square",
                 type: 'post',
                 dataType: 'json',
                 data: data,
