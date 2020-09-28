@@ -433,7 +433,7 @@
             <div class="modal-body">
 
                 <div class="form-group text-center">
-                    <img src="" class="img_attach" style="height: 500px;" alt="">
+                    <img src="" class="img_attach" style="width:100%;" alt="">
                 </div>
 
             </div>
