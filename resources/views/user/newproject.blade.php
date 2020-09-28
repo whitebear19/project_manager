@@ -1,6 +1,16 @@
 @extends('layouts.user')
 
 @section('content')
+<script>
+    $(document).ready(function(){
+        $(".datepicker").datepicker();
+        $(".datepicker").change(function(){
+
+            $(".datepicker_caption").html($(this).val());
+        });
+    });
+
+</script>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -30,11 +40,17 @@
                             <div class="text-center">
                                 <label for="">Set a Due date(Optional)</label>
                                 <br>
-                                <i class="fas fa-calendar-week" id="btn_calander_show" style="font-size: 80px;color:#20a4b9;" aria-hidden="true"></i>
+                                <div class="pos-rel" style="width:70px;height:80px;margin:auto;">
+                                    <i class="fas fa-calendar-week" id="btn_calander_show" style="font-size: 80px;color:#20a4b9;" aria-hidden="true"></i>
+                                    <input type="text" name="date" class="datepicker date_customize">
+                                </div>
                                 <br>
+                                <span class="datepicker_caption">
+
+                                </span>
                             </div>
-                            <br>
-                            <input type="date" name="date" id="project_calander"  class="form-control disp-none">
+
+
                         </div>
                     </div>
                 </div>

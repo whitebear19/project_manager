@@ -19,8 +19,10 @@
 
   <link href="{{ asset('css/demo.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet" />
+  <link href="{{ asset('css/jquery-ui.min.css') }}" rel="stylesheet" />
   <script src="{{ asset('js/jquery.min.js') }}" type="text/javascript"></script>
   <script src="{{ asset('js/sweetalert2.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('js/jquery-ui.min.js') }}" type="text/javascript"></script>
 
   <script src="https://kit.fontawesome.com/38c20fcb98.js" crossorigin="anonymous"></script>
   <meta name="csrf-token" content="{{ csrf_token() }}">

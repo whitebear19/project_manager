@@ -1,6 +1,16 @@
 @extends('layouts.user')
 
 @section('content')
+<script>
+    $(document).ready(function(){
+        $(".datepicker").datepicker();
+        $(".datepicker").change(function(){
+
+            $(".datepicker_caption").html($(this).val());
+        });
+    });
+
+</script>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12 text-center">
@@ -54,13 +64,15 @@
                             <div class="text-center">
                                 <label for="">Set a Due date(Optional)</label>
                                 <br>
-                                <i class="fas fa-calendar-week" id="btn_calander_show" style="font-size: 80px;color:#20a4b9;" aria-hidden="true"></i>
+                                <div class="pos-rel" style="width:70px;height:80px;margin:auto;">
+                                    <i class="fas fa-calendar-week" id="btn_calander_show" style="font-size: 80px;color:#20a4b9;" aria-hidden="true"></i>
+                                    <input type="text" name="date" class="datepicker date_customize" value="{{ $project->date }}">
+                                </div>
                                 <br>
+                                <span class="datepicker_caption">
+                                    {{ $project->date }}
+                                </span>
                             </div>
-                            <br>
-                            <input type="date" name="date" id="project_calander" class="form-control disp-none" value="{{ $project->date }}" @if (Auth::user()->role < 1)
-                            readonly
-                        @endif>
                         </div>
                     </div>
                 </div>
@@ -144,6 +156,14 @@
                                 <tr>
                                     <td>
                                         {{ $item['name'] }}
+                                    </td>
+                                    <td>
+                                        @if (!empty($item['view']))
+                                            <button class="btn_trans btn_viewattach" data-view="{{ $item['link'] }}" data-toggle="modal" data-target="#viewAttach">View</button>
+                                        @else
+                                            <a href="/upload/attach/{{ $item['link'] }}">View</a>
+                                        @endif
+
                                     </td>
                                     <td>
                                         <a href="/upload/attach/{{ $item['link'] }}" download="">Download</a>
@@ -398,6 +418,32 @@
     </div>
   </div>
 
+  {{-- ---------------------------------- --}}
+
+<div class="modal fade" id="viewAttach" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="commentModalTitle">View Attachment</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+            <div class="modal-body">
+
+                <div class="form-group text-center">
+                    <img src="" class="img_attach" style="height: 500px;" alt="">
+                </div>
+
+            </div>
+            <div class="modal-footer commentModalFooter">
+                <button type="button" class="btn btn-secondary btn-normal" data-dismiss="modal">Close</button>
+            </div>
+
+      </div>
+    </div>
+  </div>
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -893,20 +939,17 @@
                 }
                 console.log(attach);
             });
-        });
-
-        $(document).ready(function(){
-            $('#btn_calander_show').click(function(){
-               if($('#project_calander').hasClass('disp-none'))
-               {
-                    $('#project_calander').removeClass('disp-none');
-               }
-               else
-               {
-                    $('#project_calander').addClass('disp-none');
-               }
+            $('.btn_viewattach').click(function(){
+                $('.img_attach').attr('');
+                var attach = $(this).data('view');
+                if(attach !='')
+                {
+                    $('.img_attach').attr('src','/upload/attach/'+attach);
+                }
             });
         });
+
+
     });
 </script>
 @endsection

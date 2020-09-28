@@ -1,4 +1,4 @@
-
+button{outline: none!important;}
 .dash_title{font-size: 18px; font-weight: 600;}
 .mt-50{margin-top:50px;}
 .project_list{padding:0px;margin-top:40px;}
@@ -89,3 +89,6 @@ button{cursor: pointer;}
     position: relative;
     border-top: 1px solid;
 }
+.pos-rel{position: relative;}
+.pos-abs{position: absolute;}
+.date_customize{outline: none;background-color: transparent;opacity: 0;position: absolute;cursor: pointer;left: 0;width: 100%;height: 80px;}

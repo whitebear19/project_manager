@@ -234,12 +234,21 @@ class UserController extends Controller
         $attachments = Attach::where('project_id',$id)->latest()->get();
         $comments = Comment::where('project_id',$id)->latest()->get();
         $attachArray = array();
-
+        $is_contain = array("jpg", "png", "gif");
         foreach($attachments as $item)
         {
             $data = array();
             $data['name'] = $item->name;
             $data['link'] = $item->link;
+            $arr = explode(".", $item->link, 2);
+            $second = $arr[1];
+            if (in_array($second, $is_contain)) {
+               $data['view'] = $second;
+            }
+            else
+            {
+                $data['view'] = '';
+            }
             $data['created_at'] = $item->created_at;
             array_push($attachArray,$data);
         }
@@ -250,6 +259,16 @@ class UserController extends Controller
                 $data = array();
                 $data['name'] = $item->attach;
                 $data['link'] = $item->attach;
+                $arr = explode(".", $item->attach, 2);
+                $second = $arr[1];
+                if (in_array($second, $is_contain)) {
+                    $data['view'] = $second;
+                }
+                else
+                {
+                    $data['view'] = '';
+                }
+
                 $data['created_at'] = $item->created_at;
                 array_push($attachArray,$data);
             }
@@ -262,6 +281,15 @@ class UserController extends Controller
                 $data = array();
                 $data['name'] = $item->attach;
                 $data['link'] = $item->attach;
+                $arr = explode(".", $item->attach, 2);
+                $second = $arr[1];
+                if (in_array($second, $is_contain)) {
+                $data['view'] = $second;
+                }
+                else
+                {
+                    $data['view'] = '';
+                }
                 $data['created_at'] = $item->created_at;
                 array_push($attachArray,$data);
             }
