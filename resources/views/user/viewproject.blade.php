@@ -88,7 +88,7 @@
                 </div>
 
                 <br>
-                <table class="table input-border">
+                <table class="table input-border tasktable">
                     <tbody>
                         @foreach ($results as $item)
                             <tr>
@@ -140,16 +140,16 @@
                     <br>
                     <table class="table">
                         <tbody>
-                            @foreach ($attachments as $item)
+                            @foreach ($attachArray as $item)
                                 <tr>
                                     <td>
-                                        {{ $item->name }}
+                                        {{ $item['name'] }}
                                     </td>
                                     <td>
-                                        <a href="/upload/attach/{{ $item->link }}" download="">Download</a>
+                                        <a href="/upload/attach/{{ $item['link'] }}" download="">Download</a>
                                     </td>
                                     <td>
-                                        {{ date_format($item->created_at,"d/m/Y") }}
+                                        {{ date_format($item['created_at'],"d/m/Y") }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -886,6 +886,12 @@
                     $(".attach_taskContent").attr('href','/upload/attach/'+attach);
                     $(".attach_taskContent").html(attach);
                 }
+                else
+                {
+                    $(".attach_taskContent").attr('href','');
+                    $(".attach_taskContent").html('');
+                }
+                console.log(attach);
             });
         });
 

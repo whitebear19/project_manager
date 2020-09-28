@@ -17,7 +17,7 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->string('project_id');
             $table->string('title');
-            $table->string('description');
+            $table->text('description');
             $table->string('attach')->nullable();
             $table->string('status');
             $table->timestamps();

@@ -233,6 +233,39 @@ class UserController extends Controller
         $tasks = Task::where('project_id',$id)->latest()->get();
         $attachments = Attach::where('project_id',$id)->latest()->get();
         $comments = Comment::where('project_id',$id)->latest()->get();
+        $attachArray = array();
+
+        foreach($attachments as $item)
+        {
+            $data = array();
+            $data['name'] = $item->name;
+            $data['link'] = $item->link;
+            $data['created_at'] = $item->created_at;
+            array_push($attachArray,$data);
+        }
+        foreach($tasks as $item)
+        {
+            if(!empty($item->attach))
+            {
+                $data = array();
+                $data['name'] = $item->attach;
+                $data['link'] = $item->attach;
+                $data['created_at'] = $item->created_at;
+                array_push($attachArray,$data);
+            }
+
+        }
+        foreach($comments as $item)
+        {
+            if(!empty($item->attach))
+            {
+                $data = array();
+                $data['name'] = $item->attach;
+                $data['link'] = $item->attach;
+                $data['created_at'] = $item->created_at;
+                array_push($attachArray,$data);
+            }
+        }
 
         $page = "dashboard";
         $data = array();
@@ -260,7 +293,7 @@ class UserController extends Controller
             array_push($results,$data);
         }
 
-        return view('user.viewproject',compact('page','project','tasks','attachments','comments','results'));
+        return view('user.viewproject',compact('page','project','tasks','attachments','comments','results','attachArray'));
     }
 
     public function deleteproject(Request $request)

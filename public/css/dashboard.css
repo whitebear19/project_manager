@@ -85,3 +85,7 @@ button{cursor: pointer;}
     vertical-align: middle;
     border-top: none;
 }
+.table.tasktable>tbody>tr {
+    position: relative;
+    border-top: 1px solid;
+}
