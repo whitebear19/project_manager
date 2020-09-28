@@ -22,7 +22,7 @@
                                 <label for="" class="text-border" style="border: 1px solid #222222;padding:5px;border-radius:5px;">Description<span style="color: red;">*</span></label>
                             </div>
 
-                            <textarea type="text" name="description" id="description" rows="6" class="form-control"></textarea>
+                            <textarea type="text" name="description" id="description" rows="6" class="form-control input-border"></textarea>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -30,11 +30,11 @@
                             <div class="text-center">
                                 <label for="">Set a Due date(Optional)</label>
                                 <br>
-                                <i class="fas fa-calendar-week" style="font-size: 80px;color:#20a4b9;" aria-hidden="true"></i>
+                                <i class="fas fa-calendar-week" id="btn_calander_show" style="font-size: 80px;color:#20a4b9;" aria-hidden="true"></i>
                                 <br>
                             </div>
                             <br>
-                            <input type="date" name="date" id="" class="form-control">
+                            <input type="date" name="date" id="project_calander"  class="form-control disp-none">
                         </div>
                     </div>
                 </div>
@@ -51,6 +51,17 @@
     </div>
 </div>
 <script type="text/javascript">
-
+    $(document).ready(function(){
+        $('#btn_calander_show').click(function(){
+            if($('#project_calander').hasClass('disp-none'))
+            {
+                $('#project_calander').removeClass('disp-none');
+            }
+            else
+            {
+                $('#project_calander').addClass('disp-none');
+            }
+        });
+    });
 </script>
 @endsection
