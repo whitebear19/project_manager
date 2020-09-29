@@ -92,3 +92,4 @@ button{cursor: pointer;}
 .pos-rel{position: relative;}
 .pos-abs{position: absolute;}
 .date_customize{outline: none;background-color: transparent;opacity: 0;position: absolute;cursor: pointer;left: 0;width: 100%;height: 80px;}
+.dispnone{display: none;}

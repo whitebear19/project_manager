@@ -311,11 +311,24 @@ class UserController extends Controller
             {
                 $data['comment_id'] = $comment->id;
                 $data['comment'] = $comment->content;
+                $data['link'] = $comment->attach;
+               
+                $arr = explode(".", $comment->attach, 2);
+                $second = $arr[1];
+                if (in_array($second, $is_contain)) {
+                    $data['view'] = $second;
+                }
+                else
+                {
+                    $data['view'] = '';
+                }
             }
             else
             {
                 $data['comment_id'] = '';
                 $data['comment'] = '';
+                $data['link'] = '';
+                $data['view'] = '';
             }
 
             array_push($results,$data);

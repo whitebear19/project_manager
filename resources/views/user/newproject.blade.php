@@ -3,10 +3,23 @@
 @section('content')
 <script>
     $(document).ready(function(){
+        $('.btn_delete_date').css('display','none');
         $(".datepicker").datepicker();
         $(".datepicker").change(function(){
 
             $(".datepicker_caption").html($(this).val());
+           
+            var dateval = $('.datepicker').val();
+            if(dateval.length>0)
+            {     
+                $('.btn_delete_date').css('display','inline-block');
+            }
+        });
+
+        $('.btn_delete_date').click(function(){
+            $('.datepicker').val('');
+            $(".datepicker_caption").html('');
+            $('.btn_delete_date').css('display','none');
         });
     });
 
@@ -48,6 +61,8 @@
                                 <span class="datepicker_caption">
 
                                 </span>
+                                &nbsp;&nbsp;
+                                <button class="btn_trans btn_delete_date" type="button"><i class="fas fa-times"></i></button>
                             </div>
 
 
@@ -78,6 +93,8 @@
                 $('#project_calander').addClass('disp-none');
             }
         });
+        
+        
     });
 </script>
 @endsection

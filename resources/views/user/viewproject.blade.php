@@ -7,6 +7,15 @@
         $(".datepicker").change(function(){
 
             $(".datepicker_caption").html($(this).val());
+            
+            $('.btn_delete_date').css('display','inline-block');
+            
+        });
+
+        $('.btn_delete_date').click(function(){
+            $('.datepicker').val('');
+            $(".datepicker_caption").html('');
+            $('.btn_delete_date').css('display','none');
         });
     });
 
@@ -72,6 +81,10 @@
                                 <span class="datepicker_caption">
                                     {{ $project->date }}
                                 </span>
+                                &nbsp;&nbsp;
+                                
+                                <button class="btn_trans btn_delete_date @if (empty($project->date)) dispnone @endif" type="button"><i class="fas fa-times"></i></button>
+                                                              
                             </div>
                         </div>
                     </div>
@@ -124,7 +137,7 @@
                                     <button type="button" rel="tooltip" data-id="{{ $item['id'] }}" data-status="{{ $item['status'] }}" data-title="{{ $item['title'] }}" data-description="{{ $item['description'] }}" id="btn-editTask" data-toggle="modal" data-target="#editTaskModal" class="btn btn-success">
                                         <i class="material-icons">edit</i>
                                     </button>
-                                    <button type="button" rel="tooltip" class="btn btn-info @if (!empty($item['comment_id'])) alreadycomment @endif" data-id="{{ $item['id'] }}" data-cid="{{ $item['comment_id'] }}" data-comment="{{ $item['comment'] }}" data-toggle="modal" id="btn-commentMM" data-target="#newCommentModal">
+                                    <button type="button" rel="tooltip" class="btn btn-info @if (!empty($item['comment_id'])) alreadycomment @endif" data-id="{{ $item['id'] }}" data-cid="{{ $item['comment_id'] }}" data-comment="{{ $item['comment'] }}" data-view="{{ $item['view'] }}" data-link="{{ $item['link'] }}" data-toggle="modal" id="btn-commentMM" data-target="#newCommentModal">
                                         <i class="far fa-comment"></i>
                                     </button>
 
@@ -370,6 +383,12 @@
                 <div class="form-group">
                     <label for="">Content</label>
                     <textarea name="comment" id="commentM" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="">Attachment</label>
+                    <img src="" class="comment_attach" style="width: 100%;" alt="">
+                    <a href="" class="download_comment_attach" style="display: none;" download="">Download</a>
+                    <input type="hidden" class="delattach" name="delattach" value="0">
                 </div>
                 <div class="form-group">
                     <label class="btn btn-success btn-round tg-fileuploadlabel" for="comment_attach">
@@ -742,9 +761,24 @@
 
 
         $(document).on('click','#btn-commentMM',function(){
-
+            $('.download_comment_attach').css('display','none');
+            $('.download_comment_attach').attr('href','');
+            $('.comment_attach').attr('src','');
             var id = $(this).data("id");
-            console.log(id);
+            var view = $(this).data('view');
+            var link = $(this).data('link');
+            if(view != "")
+            {
+                $('.comment_attach').attr('src','/upload/attach/'+link);
+            }
+            else
+            {
+                if(link != '')
+                {
+                    $('.download_comment_attach').css('display','block');
+                    $('.download_comment_attach').attr('href','/upload/attach/'+link);
+                }
+            }
             $('#taskidM').val(id);
             var commentId = $(this).data('cid');
             if(commentId)
