@@ -312,16 +312,23 @@ class UserController extends Controller
                 $data['comment_id'] = $comment->id;
                 $data['comment'] = $comment->content;
                 $data['link'] = $comment->attach;
-               
-                $arr = explode(".", $comment->attach, 2);
-                $second = $arr[1];
-                if (in_array($second, $is_contain)) {
-                    $data['view'] = $second;
+                if(!empty($comment->attach))
+                {
+                    $arr = explode(".", $comment->attach, 2);
+                    $second = $arr[1];
+                    if (in_array($second, $is_contain)) {
+                        $data['view'] = $second;
+                    }
+                    else
+                    {
+                        $data['view'] = '';
+                    }
                 }
                 else
                 {
                     $data['view'] = '';
                 }
+
             }
             else
             {
@@ -513,6 +520,10 @@ class UserController extends Controller
 
             $comment = Comment::find($commentid);
             $comment->content = $request->get('comment');
+            if($request->get('delattach')=='1')
+            {
+                $comment->attach = '';
+            }
             if($attach != "")
             {
                 $comment->attach = $attach;

@@ -7,9 +7,9 @@
         $(".datepicker").change(function(){
 
             $(".datepicker_caption").html($(this).val());
-            
+
             $('.btn_delete_date').css('display','inline-block');
-            
+
         });
 
         $('.btn_delete_date').click(function(){
@@ -82,9 +82,9 @@
                                     {{ $project->date }}
                                 </span>
                                 &nbsp;&nbsp;
-                                
+
                                 <button class="btn_trans btn_delete_date @if (empty($project->date)) dispnone @endif" type="button"><i class="fas fa-times"></i></button>
-                                                              
+
                             </div>
                         </div>
                     </div>
@@ -392,10 +392,13 @@
                 </div>
                 <div class="form-group">
                     <label class="btn btn-success btn-round tg-fileuploadlabel" for="comment_attach">
-
                         <span class="text-color-green" style="line-height:15px;">Add Attachment</span>
                         <input id="comment_attach" class="tg-fileinput" type="file" name="" autocomplete="off" accept=".jpg, .jpeg, .png">
                     </label>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn_trans btn_remove_attach_comment">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
             </div>
             <div class="modal-footer commentModalFooter">
@@ -758,18 +761,25 @@
                 });
             }
         });
-
+        $(document).on('click','.btn_remove_attach_comment',function(){
+            $('.download_comment_attach').css('display','none');
+            $('.comment_attach').attr('src','');
+            $('.delattach').val('1');
+            $('.btn_remove_attach_comment').css('display','none');
+        });
 
         $(document).on('click','#btn-commentMM',function(){
             $('.download_comment_attach').css('display','none');
             $('.download_comment_attach').attr('href','');
             $('.comment_attach').attr('src','');
+            $('.btn_remove_attach_comment').css('display','none');
             var id = $(this).data("id");
             var view = $(this).data('view');
             var link = $(this).data('link');
             if(view != "")
             {
                 $('.comment_attach').attr('src','/upload/attach/'+link);
+                $('.btn_remove_attach_comment').css('display','inline-block');
             }
             else
             {
@@ -835,6 +845,7 @@
                 formdata.append('id',$("#proejct_id").val());
                 formdata.append('taskid',$("#taskidM").val());
                 formdata.append('commentid',$("#commentidM").val());
+                formdata.append('delattach',$(".delattach").val());
 
                 formdata.append('_token',$('meta[name=csrf-token]').attr("content"));
 
