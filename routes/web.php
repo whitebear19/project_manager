@@ -24,15 +24,15 @@ Route::get('/aboutus', 'HomeController@aboutus')->name('aboutus');
 Route::get('/contactus', 'HomeController@contactus')->name('contactus');
 Route::post('/contactus', 'HomeController@storecontactus')->name('store.contactus');
 
-Route::any('/dashboard', 'UserController@dashboard')->name('dashboard');
-Route::any('/dashboard/payment', 'UserController@payment')->name('payment');
-Route::any('/dashboard/archieve', 'UserController@archieve')->name('archieve');
-Route::any('/dashboard/settings', 'UserController@settings')->name('settings');
-Route::any('/dashboard/deadline', 'UserController@deadline')->name('deadline');
+Route::any('/dashboard', 'UserController@dashboard')->name('dashboard')->middleware('checkpaid');
+Route::any('/dashboard/payment', 'UserController@payment')->name('payment')->middleware('checkpaid');
+Route::any('/dashboard/archieve', 'UserController@archieve')->name('archieve')->middleware('checkpaid');
+Route::any('/dashboard/settings', 'UserController@settings')->name('settings')->middleware('checkpaid');
+Route::any('/dashboard/deadline', 'UserController@deadline')->name('deadline')->middleware('checkpaid');
 
 Route::any('/dashboard/inbox', 'UserController@inbox')->name('inbox');
 Route::get('/dashboard/inbox/{id}', 'UserController@messageview');
-Route::get('/dashboard/newproject', 'UserController@newproject')->name('newproject');
+Route::get('/dashboard/newproject', 'UserController@newproject')->name('newproject')->middleware('checkpaid');
 Route::post('/dashboard/storeproject', 'UserController@storeproject')->name('storeproject');
 Route::get('/dashboard/project/{id}', 'UserController@projectview');
 Route::post('/dashboard/deleteproject', 'UserController@deleteproject')->name('deleteproject');
