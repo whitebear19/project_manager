@@ -22,6 +22,9 @@
             <p class="fs-18">
                 It’s the kind of business software that slips into businesses through the backdoor, just because individual employees like how it works.
             </p>
+            <p class="fs-18">
+                Welcome here.
+            </p>
         </div>
     </div>
 </div>
